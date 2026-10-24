@@ -11,7 +11,6 @@ hl.config({
       raw_scroll = true,
       modifier = "CTRL",
       sensitivity = 0.01,
-      invert_scroll = false, -- follows natural scrolling; true adds another reversal
       consume_scroll = true,
       step = 1.20,
       min_factor = 1.0,

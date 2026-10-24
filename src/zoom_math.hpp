@@ -17,8 +17,8 @@ inline float boundedZoom(float current, float multiplier, float minimum,
 
 inline float scrollZoom(float current, float delta, float sensitivity,
                         float minimum, float maximum, float snapThreshold,
-                        bool invertScroll, bool naturalScroll = false) {
-  const auto zoomOutDelta = (invertScroll != naturalScroll) ? -delta : delta;
+                        bool naturalScroll) {
+  const auto zoomOutDelta = naturalScroll ? -delta : delta;
   const auto next = std::clamp(current - zoomOutDelta * sensitivity, minimum,
                                maximum);
   return zoomOutDelta > 0.F && next < snapThreshold ? minimum : next;
