@@ -14,6 +14,20 @@ int main() {
   assert(std::abs(boundedZoom(NAN, 1.2F, 1.F, 40.F, 1.05F) - 1.F) < 0.0001F);
 
   using MacOSZoom::scrollZoom;
+  // Natural scrolling reverses the default; the manual option reverses it again.
+  for (const bool natural : {false, true}) {
+    for (const bool invert : {false, true}) {
+      const auto direction = (natural != invert) ? 1.F : -1.F;
+      assert(std::abs(scrollZoom(2.F, 10.F, 0.01F, 1.F, 40.F, 1.05F,
+                                invert, natural) - (2.F + direction * 0.1F)) < 0.0001F);
+      assert(std::abs(scrollZoom(2.F, -10.F, 0.01F, 1.F, 40.F, 1.05F,
+                                invert, natural) - (2.F - direction * 0.1F)) < 0.0001F);
+      assert(scrollZoom(1.06F, -2.F * direction, 0.01F, 1.F, 40.F, 1.05F,
+                        invert, natural) == 1.F);
+      assert(scrollZoom(40.F, 10.F * direction, 0.01F, 1.F, 40.F, 1.05F,
+                        invert, natural) == 40.F);
+    }
+  }
   assert(std::abs(scrollZoom(2.F, 10.F, 0.01F, 1.F, 40.F, 1.05F, false) -
                   1.9F) < 0.0001F);
   assert(std::abs(scrollZoom(2.F, 10.F, 0.01F, 1.F, 40.F, 1.05F, true) -

@@ -131,10 +131,16 @@ void onRawAxis(IPointer::SAxisEvent event, Event::SCallbackInfo &info) {
   const auto minimum = config.minimum->value();
   const auto maximum = std::max(minimum, config.maximum->value());
   const auto sensitivity = config.sensitivity->value();
+  static const CConfigValue<Config::BOOL> touchpadNaturalScroll(
+      "input:touchpad:natural_scroll");
+  static const CConfigValue<Config::BOOL> mouseNaturalScroll("input:natural_scroll");
+  const bool naturalScroll = event.source == WL_POINTER_AXIS_SOURCE_FINGER
+                                 ? *touchpadNaturalScroll
+                                 : *mouseNaturalScroll;
   const auto next = MacOSZoom::scrollZoom(
       monitor->m_cursorZoom->value(), static_cast<float>(event.delta),
       sensitivity, minimum, maximum, config.snapThreshold->value(),
-      config.invertScroll->value());
+      config.invertScroll->value(), naturalScroll);
 
   setZoom(monitor, next, false, true);
   info.cancelled = config.consumeScroll->value();
@@ -283,7 +289,7 @@ APICALL EXPORT PLUGIN_DESCRIPTION_INFO PLUGIN_INIT(HANDLE handle) {
       "plugin:macos_zoom:raw_scroll", "consume continuous raw scroll deltas",
       true);
   config.invertScroll = makeShared<Config::Values::CBoolValue>(
-      "plugin:macos_zoom:invert_scroll", "reverse zoom scroll direction",
+      "plugin:macos_zoom:invert_scroll", "reverse zoom direction relative to natural scrolling",
       false);
   config.consumeScroll = makeShared<Config::Values::CBoolValue>(
       "plugin:macos_zoom:consume_scroll",

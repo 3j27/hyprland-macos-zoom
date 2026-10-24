@@ -111,7 +111,7 @@ All options live below `plugin.macos_zoom` in Lua config:
 - `raw_scroll`: use continuous axis deltas; default `true`.
 - `modifier`: modifier for raw scrolling; default `CTRL`.
 - `sensitivity`: linear factor change per raw axis unit; default `0.01`.
-- `invert_scroll`: reverse only the modifier-scroll zoom direction, leaving normal scrolling unchanged; default `false`.
+- `invert_scroll`: apply an extra reversal to modifier-scroll zoom; default `false`. Zoom already reverses automatically when Hyprland's `input:touchpad:natural_scroll` (touchpad) or `input:natural_scroll` (wheel) is enabled. These global settings are read on each event, so changes apply live; per-device overrides are not detected. Normal scrolling is unchanged.
 - `consume_scroll`: prevent the modified gesture from also scrolling the app; default `true`.
 - `step`: multiplicative change used by the optional discrete `in`/`out` actions; default `1.20`.
 - `min_factor`: lower bound; default `1.0`.
